@@ -44,17 +44,55 @@ router.post("/",authenticateToken,(req,res)=>{
     if(!description || description.trim() === "" || !category || category.trim() === ""){
         return res.status(400).json({message:"Description and Category fields are required and must be non empty"})
     }
+    if (isCompleted !== undefined && typeof isCompleted !== "boolean") {
+        return res.status(400).json({message:"isCompleted must be a boolean"})
+    }
    
     const newTodo={
         id:nextTodoId++,// auto increment id
         userId:req.user.id,
-        description,
-        category,
-        isCompleted: isCompleted!=undefined?isCompleted:false
+        description: description.trim(),
+        category: category.trim(),
+        isCompleted: isCompleted!==undefined?isCompleted:false
     }
     todosArray.push(newTodo)
     res.status(201).json(newTodo)
 })
+
+/**
+ * Updates the todo with values from req.body after validation
+ * description and category fields are trimmed, cannot be empty if present
+ * isCompleted field must be boolean if present
+ * return { todo } on success and { error } on validation failure.
+ */
+
+function validateAndUpdateTodo(todo, updates){
+    const {description, category, isCompleted}=updates
+
+    if (updates.hasOwnProperty('description')) {
+        const trimmedDescription=description.trim()
+        if (trimmedDescription==="") {
+            return {error:"Decription cannot be empty or whitespaces"}
+        }
+        todo.description = trimmedDescription
+    }
+
+   if (updates.hasOwnProperty('category')) {
+        const trimmedCategory=category.trim()
+        if (trimmedCategory==="") {
+            return {error:"Category cannot be empty or whitespaces"}
+        }
+        todo.category = trimmedCategory
+    }
+
+    if (updates.hasOwnProperty('isCompleted')) {
+        if (typeof isCompleted !== "boolean") {
+            return {error:"isCompleted must be a boolean value"}
+        }
+        todo.isCompleted = isCompleted
+    }
+    return {todo}
+}
 
 /**
  * Updates a todo item by ID
@@ -76,26 +114,16 @@ router.put("/:id",authenticateToken,(req,res)=>{
     if(!todo){
         return res.status(404).json({message:"Todo item not found"})
     }
-    if(todo.userId!=req.user.id){
+    if(todo.userId!==req.user.id){
         return res.status(403).json({message:"Not authorized"})
     }
-    const {description,category, isCompleted}=req.body
-    if(description){
-        if(description.trim()===""){
-            return res.status(400).json({message:"Description cannot be empty or whitespaces"})
-        }
-        todo.description=description
+    
+    const result=validateAndUpdateTodo(todo, req.body)
+    if(result.error){
+        return res.status(400).json({message:result.error})
     }
-    if(category){
-         if(category.trim()===""){
-            return res.status(400).json({message:"Category cannot be empty or whitespaces"})
-        }
-        todo.category=category
-    }
-    if(isCompleted!=undefined){
-        todo.isCompleted=isCompleted
-    }
-    res.status(200).json(todo)
+
+    res.status(200).json(result.todo)
 })
 
 
@@ -120,7 +148,7 @@ router.delete("/:id",authenticateToken,(req,res)=>{
         return res.status(404).json({message:"Todo not found"})
     }
 
-    if(todosArray[todoIndex].userId!=req.user.id){
+    if(todosArray[todoIndex].userId!==req.user.id){
         return res.status(403).json({message:"Not authorized"})
     }
     todosArray.splice(todoIndex,1)
