@@ -80,11 +80,13 @@ Request Body:
 
 ```json
 {
-  "description": "Buy groceries" (required),
-  "category": "Home" (required),
-  "isCompleted": false (optional)
+  "description": "Buy groceries",
+  "category": "Home",
+  "isCompleted": false
 }
 ```
+- description and category are required. isCompleted is optional.
+  
 Successful Response (201):
 
 ```json
@@ -113,11 +115,13 @@ Request Body:
 
 ```json
 {
-  "description": "Buy new shoes" (optional),
-  "category": "Shopping" (optional),
-  "isCompleted": true (optional)
+  "description": "Buy new shoes",
+  "category": "Shopping",
+  "isCompleted": true
 }
 ```
+- description, category and isCompleted are all optional but if provided in the body then their values cannot be empty string or just containing white spaces.
+  
 Successful Response (200):
 
 ```json
