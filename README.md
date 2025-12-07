@@ -1,4 +1,4 @@
-## 📦 Installation & Setup
+## Installation & Setup
 
 ```bash
 git clone https://github.com/shanaulakh29/ToDo_Backend
