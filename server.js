@@ -10,7 +10,7 @@ const express = require("express")
 const app = express()
 app.use(express.json())
 
-const PORT = 3004
+const PORT = 3000
 
 const loginRoute = require("./routes/login")
 const todoRoutes = require("./routes/todos")

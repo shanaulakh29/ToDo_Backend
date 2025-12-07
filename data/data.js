@@ -48,4 +48,9 @@ const todosArray=[
   }
 ]
 
-module.exports = {usersArray,todosArray}
+// Global counter for new todos
+const todoCounter={
+  nextId: todosArray.length+1
+}
+
+module.exports = {usersArray,todosArray, todoCounter}
