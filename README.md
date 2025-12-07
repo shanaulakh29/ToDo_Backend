@@ -1,3 +1,28 @@
+## Project Structure
+
+```
+ToDo_Backend/
+│
+├── controllers/
+│   ├── authController.js
+│   └── todoController.js
+│
+├── data/
+│   └── data.js
+│
+├── middleware/
+│   └── authenticateToken.js
+│
+├── routes/
+│   ├── login.js
+│   └── todos.js
+│
+├── utils/
+│   └── validateTodo.js
+│
+└── server.js
+```
+
 ## Installation & Setup
 
 ```bash
