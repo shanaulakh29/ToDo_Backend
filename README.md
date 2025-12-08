@@ -71,7 +71,7 @@ Error Responses:
 
 ### 2. Get All Todos (Protected)
 - URL: Get /todos
-  
+- Can also filter results based on description or category or both.  
 ```bash
 Authorization: Bearer <token>
 ```
